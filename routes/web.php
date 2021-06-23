@@ -13,5 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/','BukuController@index');
+Route::get('/home','BukuController@index');
 Route::resource('bukus', 'BukuController');
+
+Auth::routes();
+
+Route::get('/', 'HomeController@index')->name('home');

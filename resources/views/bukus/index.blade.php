@@ -7,7 +7,10 @@
             {{ session()->get('success') }}
         </div>
         @endif
-        <h1 class="display-3" style="text-align: center">Toko Buku</h1>
+        <div style="flex-direction: row; display: flex; justify-content: flex-end; align-items: center">
+            <h1 class="display-3" style="text-align: center">Toko Buku</h1>
+            <button class="btn btn-link" type="submit" style="width: 100px; margin-left: 20vw;">Logout</button>
+        </div>
         <div>
             <a style="margin-top: 19px; margin-bottom: 19px;" href="{{ route('bukus.create')}}" class="btn btn-primary">New Buku</a>
         </div>
