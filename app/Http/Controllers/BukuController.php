@@ -37,18 +37,40 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'judul_buku'=>'required',
-            'penulis'=>'required',
-            'penerbit'=>'required'
-        ]);
-        $buku = new Buku([
-            'judul_buku' => $request->get('judul_buku'),
-            'penulis' => $request->get('penulis'),
-            'penerbit' => $request->get('penerbit')
-        ]);
-        $buku->save();
-        return redirect('/bukus')->with('success', 'Contact saved!');
+        // $request->validate([
+        //     'judul_buku'=>'required',
+        //     'penulis'=>'required',
+        //     'penerbit'=>'required'
+        // ]);
+        // $buku = new Buku([
+        //     'judul_buku' => $request->get('judul_buku'),
+        //     'penulis' => $request->get('penulis'),
+        //     'penerbit' => $request->get('penerbit')
+        // ]);
+        // $buku->save();
+        $this->validate($request, [
+            'judul_buku'=> 'required',
+            'penulis'=> 'required',
+            'penerbit'=> 'required',
+			'img' => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
+		]);
+ 
+		// menyimpan data file yang diupload ke variabel $file
+		$file = $request->file('img');
+ 
+		$nama_file = time()."_".$file->getClientOriginalName();
+ 
+      	        // isi dengan nama folder tempat kemana file diupload
+		$tujuan_upload = 'data_file';
+		$file->move($tujuan_upload,$nama_file);
+ 
+		Buku::create([
+            'judul_buku' => $request-> judul_buku,
+            'penulis' => $request -> penulis,
+            'penerbit' => $request -> penerbit,
+			'img' => $nama_file,
+		]);
+        return redirect('/bukus')->with('success', 'Buku tersimpan!');
     }
 
     /**
@@ -57,10 +79,7 @@ class BukuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -86,14 +105,26 @@ class BukuController extends Controller
         $request->validate([
             'judul_buku'=>'required',
             'penulis'=>'required',
-            'penerbit'=>'required'
+            'penerbit'=>'required',
+            'img' => 'file|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-        $contact = Buku::find($id);
-        $contact->judul_buku =  $request->get('judul_buku');
-        $contact->penulis = $request->get('penulis');
-        $contact->penerbit = $request->get('penerbit');
-        $contact->save();
+        // menyimpan data file yang diupload ke variabel $file
+		$file = $request->file('img');
+ 
+		$nama_file = time()."_".$file->getClientOriginalName();
+ 
+      	        // isi dengan nama folder tempat kemana file diupload
+		$tujuan_upload = 'data_file';
+		$file->move($tujuan_upload,$nama_file);
+
+        $bukuEdit = Buku::find($id);
+        $bukuEdit->judul_buku =  $request->get('judul_buku');
+        $bukuEdit->penulis = $request->get('penulis');
+        $bukuEdit->penerbit = $request->get('penerbit');
+        $bukuEdit->img = $nama_file;
+        $bukuEdit->save();
         return redirect('/bukus')->with('success', 'Buku updated!');
+
     }
 
     /**

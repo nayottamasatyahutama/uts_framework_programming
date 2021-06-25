@@ -13,9 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home','BukuController@index');
-Route::resource('bukus', 'BukuController');
+
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('welcome');
+Route::group(['middleware' => 'auth'], function () {
+    
+    Route::post('/upload/proses', 'BukuController@store');
+    Route::get('/home','BukuController@index');
+    Route::resource('bukus', 'BukuController');
+    Route::get('logout', 'LogoutController@index')->name('logout');
+    Route::get('/daftarBuku/pdf','PDFController@generatePDF');
+ 
+});

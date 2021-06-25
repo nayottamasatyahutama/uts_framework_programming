@@ -6,7 +6,6 @@
         DirectoryIndex index.html index.php
     </IfModule>
     RewriteEngine On
-    RewriteBase /
 
 
     # Handle Authorization Header
@@ -21,9 +20,6 @@
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ index.php?/$1 [L]
-
-    RewriteCond %{REQUEST_URI} !^public
-    RewriteRule ^(.*)$ /$1 [L]
+    RewriteRule ^ index.php [L]
 
 </IfModule>
