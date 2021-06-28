@@ -108,10 +108,11 @@ class BukuController extends Controller
             'penerbit'=>'required',
             'img' => 'file|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+       
         // menyimpan data file yang diupload ke variabel $file
 		$file = $request->file('img');
- 
-		$nama_file = time()."_".$file->getClientOriginalName();
+        if($file !== null) {
+            $nama_file = time()."_".$file->getClientOriginalName();
  
       	        // isi dengan nama folder tempat kemana file diupload
 		$tujuan_upload = 'data_file';
@@ -124,6 +125,15 @@ class BukuController extends Controller
         $bukuEdit->img = $nama_file;
         $bukuEdit->save();
         return redirect('/bukus')->with('success', 'Buku updated!');
+        } else {
+        $bukuEdit = Buku::find($id);
+        $bukuEdit->judul_buku =  $request->get('judul_buku');
+        $bukuEdit->penulis = $request->get('penulis');
+        $bukuEdit->penerbit = $request->get('penerbit');
+        $bukuEdit->save();
+        return redirect('/bukus')->with('success', 'Buku updated!');
+        }
+		
 
     }
 
